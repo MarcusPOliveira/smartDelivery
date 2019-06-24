@@ -4,7 +4,7 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { modificaEmail, modificaSenha, autenticarUsuario } from '../../actions/AuthActions';
 
-import bg from '../../imgs/drawable-hdpi/bg.png';
+import bg from '../../imgs/backgrounds/bg.png';
 
 class Login extends Component {
   

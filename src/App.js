@@ -5,7 +5,6 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducers from './reducers/index';
 import ReduxThunk from 'redux-thunk';
-import BottomNavigation from './components/main/BottomNavigation';
 
 class App extends Component { //deve ser uma classe funcional para possa ser utilizado o componentDidMount()
 

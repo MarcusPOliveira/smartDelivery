@@ -9,7 +9,7 @@ import {
     modificaSenha, 
     cadastraUsuario, } from '../../actions/AuthActions';
 
-import bg from '../../imgs/drawable-hdpi/bg.png';
+import bg from '../../imgs/backgrounds/bg.png';
 
 class Cadastro extends Component {
   

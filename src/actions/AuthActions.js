@@ -7,15 +7,22 @@ import {
     MODIFICA_CPF,
     MODIFICA_NUMEROCELULAR,
     MODIFICA_EMAIL,
-    MODIFICA_SENHA, 
+    MODIFICA_SENHA,
+    MODIFICA_CEP,
+    MODIFICA_LOGRADOURO,
+    MODIFICA_NUMERO,
+    MODIFICA_BAIRRO,
+    MODIFICA_COMPLEMENTO,
+    CADASTRO_ENDERECO_SUCESSO,
     CADASTRO_USUARIO_SUCESSO, 
     CADASTRO_USUARIO_ERRO, 
     LOGIN_USUARIO_SUCESSO, 
     LOGIN_USUARIO_ERRO,
     LOGIN_EM_ANDAMENTO,
-    CADASTRO_EM_ANDAMENTO } from './types';
+    CADASTRO_EM_ANDAMENTO,
+    CADASTRO_ENDERECO_EM_ANDAMENTO } from './types';
 
-//MODIFICADORES
+//MODIFICADORES DE CADASTRO DE USUARIO
 export const modificaNome = (texto) => {
     return {
         type: MODIFICA_NOME,
@@ -51,6 +58,42 @@ export const modificaSenha = (texto) => {
     }
 }
 
+//MODIFICADORES DE CADASTRO DE ENDERECO
+export const modificaCep = (texto) => {
+    return {
+        type: MODIFICA_CEP,
+        payload: texto
+    }
+}
+
+export const modificaLogradouro = (texto) => {
+    return {
+        type: MODIFICA_LOGRADOURO,
+        payload: texto
+    }
+}
+
+export const modificaNumero = (texto) => {
+    return {
+        type: MODIFICA_NUMERO,
+        payload: texto
+    }
+}
+
+export const modificaBairro = (texto) => {
+    return {
+        type: MODIFICA_BAIRRO,
+        payload: texto
+    }
+}
+
+export const modificaComplemento = (texto) => {
+    return {
+        type: MODIFICA_COMPLEMENTO,
+        payload: texto
+    }
+}
+
 //CADASTRO
 export const cadastraUsuario = ({ nome, cpf, numeroCelular, email, senha }) => { //processamento assíncrono -> 1º: Return, 2º: função createUserWithEmailAndPassword
     return dispatch => {
@@ -65,9 +108,33 @@ export const cadastraUsuario = ({ nome, cpf, numeroCelular, email, senha }) => {
                     .push({ nome, cpf, numeroCelular }) //dados a serem inseridos
                     .then(value => cadastroUsuarioSucesso(dispatch)); //função de callback -> objeto que contém os dados do user recém-cadastrado
             })
-            .catch(erro => cadastroUsuarioErro(erro, dispatch)); //retorno de erro    
+            .catch(erro => cadastroUsuarioErro(erro, dispatch)); //retorno de erro
     }
 }
+
+export const cadastraEndereco = ({ cep, logradouro, numero, bairro, complemento }) => {
+    return dispatch => {
+        
+        dispatch({ type: CADASTRO_ENDERECO_EM_ANDAMENTO });
+
+        firebase.database().ref(`/contatos/${this.emailB64}`)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()) {
+                    //email do user autenticado ???
+                    const { currentUser } = firebase.auth();
+                    let emailUserB64 = b64.encode(currentUser.email);
+                    
+                    firebase.database().ref(`/endereco_usuario/${emailUserB64}`)
+                        .push({ cep, logradouro, numero, bairro, complemento })
+                        .them(value => cadastroEnderecoSucesso(dispatch));
+
+                }
+            })
+    }
+}
+
+//var myUserId = firebase.auth().currentUser.email;
 
 const cadastroUsuarioSucesso = (dispatch) => {
     dispatch (
@@ -75,7 +142,7 @@ const cadastroUsuarioSucesso = (dispatch) => {
             type: CADASTRO_USUARIO_SUCESSO
         }
     )
-    Actions.principal(); //key da scene a ser encaminhada
+    Actions.cadastrarEndereco(); //key da scene a ser encaminhada
 }
 
 const cadastroUsuarioErro = (erro, dispatch) => {
@@ -85,6 +152,15 @@ const cadastroUsuarioErro = (erro, dispatch) => {
             payload: erro.message
         }
     )
+}
+
+const cadastroEnderecoSucesso = (dispatch) => {
+    dispatch (
+        {
+            type: CADASTRO_ENDERECO_SUCESSO
+        }
+    )
+    Actions.principal(); //key da scene a ser encaminhada
 }
 
 //LOGIN

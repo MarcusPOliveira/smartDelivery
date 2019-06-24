@@ -4,11 +4,18 @@ import {
     MODIFICA_NUMEROCELULAR,
     MODIFICA_EMAIL,
     MODIFICA_SENHA,
+    MODIFICA_CEP,
+    MODIFICA_LOGRADOURO,
+    MODIFICA_NUMERO,
+    MODIFICA_BAIRRO,
+    MODIFICA_COMPLEMENTO,
+    CADASTRO_ENDERECO_SUCESSO,
     CADASTRO_USUARIO_ERRO,
     CADASTRO_USUARIO_SUCESSO,
     LOGIN_USUARIO_ERRO,
     LOGIN_EM_ANDAMENTO,
-    CADASTRO_EM_ANDAMENTO
+    CADASTRO_EM_ANDAMENTO,
+    CADASTRO_ENDERECO_EM_ANDAMENTO
 } from '../actions/types';
  
 const INITIAL_STATE = {
@@ -17,6 +24,13 @@ const INITIAL_STATE = {
     numeroCelular: '',
     email: '',
     senha: '',
+    
+    cep: '',
+    logradouro: '',
+    numero: '',
+    bairro: '',
+    complemento: '',
+
     erroCadastro: ''
 }
 
@@ -48,6 +62,42 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 senha: action.payload
             }
+
+        case MODIFICA_CEP:
+            return {
+                ...state,
+                cep: action.payload
+            }
+        case MODIFICA_LOGRADOURO:
+            return {
+                ...state,
+                logradouro: action.payload
+            }
+        case MODIFICA_NUMERO:
+            return {
+                ...state,
+                numero: action.payload
+            }
+        case MODIFICA_BAIRRO:
+            return {
+                ...state,
+                bairro: action.payload
+            }
+        case MODIFICA_COMPLEMENTO:
+            return {
+                ...state,
+                complemento: action.payload
+            }
+
+        case CADASTRO_ENDERECO_SUCESSO:
+            return {
+                ...state,
+                cep: '',
+                logradouro: '',
+                numero: '',
+                bairro: '',
+                complemento: ''
+            }
         case CADASTRO_USUARIO_ERRO:
             return {
                 ...state, //recupera o estado atual, e altera o valor da variável erroCadastro com o payload (msg de erro)
@@ -78,6 +128,11 @@ export default (state = INITIAL_STATE, action) => {
             return { 
                 ...state,
                 loading_cadastro: true //quando o dispatch é disparado (btn Cadastro pressionado), loading_cadastro é evoluído para true
+            }
+        case CADASTRO_ENDERECO_EM_ANDAMENTO:
+            return {
+                ...state,
+                loading_cadastro_endereco: true
             }
         default:
             return state;
